@@ -1,0 +1,381 @@
+openapi: 3.0.0
+info:
+  title: JSONPlaceholder API
+  description: Free fake API for testing and prototyping
+  version: 1.0.0
+servers:
+  - url: https://jsonplaceholder.typicode.com
+    description: JSONPlaceholder server
+
+paths:
+  /posts:
+    description: Endpoint for managing blog posts
+    get:
+      summary: Get all posts
+      description: Retrieve a list of all posts, optionally filtered by user ID
+      operationId: getAllPosts
+      parameters:
+        - name: userId
+          in: query
+          schema:
+            type: integer
+          description: Filter posts by user ID
+      responses:
+        '200':
+          description: List of posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+    post:
+      summary: Create a new post
+      description: Create a new blog post with title, body, and user ID
+      operationId: createPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+      responses:
+        '201':
+          description: Created post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+  /posts/{id}:
+    description: Endpoint for accessing a specific post by ID
+    get:
+      summary: Get a specific post
+      description: Retrieve details of a single post by its ID
+      operationId: getPost
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the post to retrieve
+      responses:
+        '200':
+          description: Post details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+  /users:
+    description: Endpoint for managing users
+    get:
+      summary: Get all users
+      description: Retrieve a list of all registered users
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{id}:
+    description: Endpoint for accessing a specific user by ID
+    get:
+      summary: Get a specific user
+      description: Retrieve detailed information about a single user by their ID
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the user to retrieve
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /comments:
+    description: Endpoint for managing comments on posts
+    get:
+      summary: Get all comments
+      description: Retrieve a list of all comments, optionally filtered by post ID
+      operationId: getAllComments
+      parameters:
+        - name: postId
+          in: query
+          schema:
+            type: integer
+          description: Filter comments by post ID
+      responses:
+        '200':
+          description: List of comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+
+  /albums:
+    description: Endpoint for managing photo albums
+    get:
+      summary: Get all albums
+      description: Retrieve a list of all albums, optionally filtered by user ID
+      operationId: getAllAlbums
+      parameters:
+        - name: userId
+          in: query
+          schema:
+            type: integer
+          description: Filter albums by user ID
+      responses:
+        '200':
+          description: List of albums
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Album'
+
+  /photos:
+    description: Endpoint for managing photos within albums
+    get:
+      summary: Get all photos
+      description: Retrieve a list of all photos, optionally filtered by album ID
+      operationId: getAllPhotos
+      parameters:
+        - name: albumId
+          in: query
+          schema:
+            type: integer
+          description: Filter photos by album ID
+      responses:
+        '200':
+          description: List of photos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Photo'
+
+  /todos:
+    description: Endpoint for managing todo items
+    get:
+      summary: Get all todos
+      description: Retrieve a list of all todo items, optionally filtered by user ID or completion status
+      operationId: getAllTodos
+      parameters:
+        - name: userId
+          in: query
+          schema:
+            type: integer
+          description: Filter todos by user ID
+        - name: completed
+          in: query
+          schema:
+            type: boolean
+          description: Filter todos by completion status
+      responses:
+        '200':
+          description: List of todos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+
+components:
+  schemas:
+    Post:
+      type: object
+      required:
+        - id
+        - userId
+        - title
+        - body
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the post
+        userId:
+          type: integer
+          description: ID of the user who created the post
+        title:
+          type: string
+          description: Title of the post
+        body:
+          type: string
+          description: Content of the post
+
+    PostInput:
+      type: object
+      required:
+        - title
+        - body
+        - userId
+      properties:
+        title:
+          type: string
+          description: Title of the new post
+        body:
+          type: string
+          description: Content of the new post
+        userId:
+          type: integer
+          description: ID of the user creating the post
+
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - username
+        - email
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the user
+        name:
+          type: string
+          description: Full name of the user
+        username:
+          type: string
+          description: Username of the user
+        email:
+          type: string
+          description: Email address of the user
+        phone:
+          type: string
+          description: Phone number of the user
+        website:
+          type: string
+          description: Personal website of the user
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+              description: Street address
+            suite:
+              type: string
+              description: Suite or apartment number
+            city:
+              type: string
+              description: City name
+            zipcode:
+              type: string
+              description: Postal code
+        company:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Company name
+            catchPhrase:
+              type: string
+              description: Company catchphrase
+            bs:
+              type: string
+              description: Company business description
+
+    Comment:
+      type: object
+      required:
+        - id
+        - postId
+        - name
+        - email
+        - body
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the comment
+        postId:
+          type: integer
+          description: ID of the post this comment belongs to
+        name:
+          type: string
+          description: Name of the commenter
+        email:
+          type: string
+          description: Email of the commenter
+        body:
+          type: string
+          description: Content of the comment
+
+    Album:
+      type: object
+      required:
+        - id
+        - userId
+        - title
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the album
+        userId:
+          type: integer
+          description: ID of the user who owns the album
+        title:
+          type: string
+          description: Title of the album
+
+    Photo:
+      type: object
+      required:
+        - id
+        - albumId
+        - title
+        - url
+        - thumbnailUrl
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the photo
+        albumId:
+          type: integer
+          description: ID of the album this photo belongs to
+        title:
+          type: string
+          description: Title of the photo
+        url:
+          type: string
+          description: Full-size photo URL
+        thumbnailUrl:
+          type: string
+          description: Thumbnail photo URL
+
+    Todo:
+      type: object
+      required:
+        - id
+        - userId
+        - title
+        - completed
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the todo
+        userId:
+          type: integer
+          description: ID of the user who owns the todo
+        title:
+          type: string
+          description: Title of the todo task
+        completed:
+          type: boolean
+          description: Whether the todo is completed
